@@ -17,10 +17,10 @@ jobs:
       - name: 📂 Sincronizando archivos via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ftp-hectorapi.alwaysdata.net # Change if using another host
-          username: hectorapi
-          password: clase1234
-          server-dir: www/ # Replace with your correct path
+          server: FTP_USUARIO # Change if using another host
+          username: FTP_RUTA
+          password: FTP_CLAVE
+          server-dir: FTP_CARPETA # Replace with your correct path
           protocol: ftps
           timeout: 86400000
           log-level: standard
