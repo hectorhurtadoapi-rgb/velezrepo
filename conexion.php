@@ -1,6 +1,6 @@
 <?php
 $servidor = 'hectorapi.alwaysdata.net';
-$usuario = 'roothectorapi';
+$usuario = 'hectorapi';
 $contrasena = 'clase1234';
 $base_datos = 'hectorapi_sistema_envios';
 
