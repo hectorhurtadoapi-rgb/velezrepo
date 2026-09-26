@@ -360,8 +360,8 @@ $busqueda = trim($_GET['buscar'] ?? '');
 <body>
     <nav class="navbar">
         <ul class="nav-links">
-            <li><a href="INDEX.HTML">Home</a></li>
-            <li><a href="INDEX4.HTML">Envíos</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index4.html">Envíos</a></li>
             <li><a href="https://facebook.com/share/1Gg4bBsSV6/">Facebook</a></li>
             <li><span class="nav-note">Cobro por visita</span></li>
         </ul>
