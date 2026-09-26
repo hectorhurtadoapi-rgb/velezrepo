@@ -1,5 +1,5 @@
 <?php
-$servidor = 'hectorapi.alwaysdata.net';
+$servidor = 'mysql-hectorapi.alwaysdata.net';
 $usuario = 'hectorapi';
 $contrasena = 'clase1234';
 $base_datos = 'hectorapi_sistema_envios';
