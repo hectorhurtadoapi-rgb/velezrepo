@@ -511,6 +511,11 @@ $busqueda = trim($_GET['buscar'] ?? '');
                     <h3>Puertas</h3>
                 </article>
 
+                <article class="project-card is-hidden" style="display: none;" data-category="puertas" data-search="puerta puertas">
+                    <img src="imagen.html/Imagepuertas3.jpeg" alt="Puerta de madera">
+                    <h3>Puertas</h3>
+                </article>
+
             </div>
             <p class="empty-message" id="emptyMessage">Escribe una categoria en el Search para ver las imagenes.</p>
         </section>
@@ -546,7 +551,9 @@ $busqueda = trim($_GET['buscar'] ?? '');
             var visibleCount = 0;
 
             cards.forEach(function(card) {
-                var searchWords = normalizeText(card.getAttribute("data-search"));
+                var image = card.querySelector("img");
+                var fileName = image ? image.getAttribute("src").split("/").pop() : "";
+                var searchWords = normalizeText((card.getAttribute("data-search") || "") + " " + fileName);
                 var shouldShow = text !== "" && searchWords.indexOf(text) !== -1;
 
                 card.classList.toggle("is-hidden", !shouldShow);

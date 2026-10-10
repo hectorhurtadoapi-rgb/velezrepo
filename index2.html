@@ -107,7 +107,9 @@ function buscar() {
 
     items.forEach(item => {
         const categoria = normalizar(item.getAttribute('data-category'));
-        const coincide = !texto || categoria.includes(texto);
+        const imagen = item.querySelector('img');
+        const nombreArchivo = imagen ? normalizar(imagen.getAttribute('src').split('/').pop()) : '';
+        const coincide = !texto || categoria.includes(texto) || nombreArchivo.includes(texto);
         item.style.display = coincide ? 'block' : 'none';
     });
 }
@@ -116,3 +118,4 @@ function buscar() {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
