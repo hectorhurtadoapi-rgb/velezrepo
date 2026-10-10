@@ -66,12 +66,13 @@
 
         <!-- PUERTAS -->
         <div class="col-md-4 item" data-category="puertas">
-            <video controls>
-                <source src="imagen.html/Imagepuertas.jpeg" type="video/mp4" />
-            </video>
+            <img src="imagen.html/Imagepuertas.jpeg" />
         </div>
         <div class="col-md-4 item" data-category="puertas">
             <img src="imagen.html/Imagepuertas2.jpeg" />
+        </div>
+        <div class="col-md-4 item" data-category="puertas">
+            <img src="imagen.html/Imagepurtas3.jpeg" />
         </div>
 
         <!-- MUEBLES PARA TV -->
@@ -93,11 +94,12 @@
 
 <script>
 function buscar() {
-    const texto = document.getElementById("searchInput").value.toLowerCase();
+    const texto = document.getElementById("searchInput").value.trim().toLowerCase();
     const items = document.querySelectorAll('.item');
 
     items.forEach(item => {
-        item.style.display = item.getAttribute('data-category') === texto ? 'block' : 'none';
+        const categoria = item.getAttribute('data-category').toLowerCase();
+        item.style.display = !texto || categoria.includes(texto) ? 'block' : 'none';
     });
 }
 </script>
