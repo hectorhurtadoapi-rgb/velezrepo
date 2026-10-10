@@ -91,12 +91,24 @@
 </div>
 
 <script>
+function normalizar(texto) {
+    return (texto || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/purtas/g, 'puertas')
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim();
+}
+
 function buscar() {
-    const texto = document.getElementById("searchInput").value.toLowerCase();
+    const texto = normalizar(document.getElementById('searchInput').value);
     const items = document.querySelectorAll('.item');
 
     items.forEach(item => {
-        item.style.display = item.getAttribute('data-category') === texto ? 'block' : 'none';
+        const categoria = normalizar(item.getAttribute('data-category'));
+        const coincide = !texto || categoria.includes(texto);
+        item.style.display = coincide ? 'block' : 'none';
     });
 }
 </script>

@@ -1,4 +1,30 @@
 <?php
+$carpeta = __DIR__ . '/imagen.html';
+$extensionesPermitidas = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'avif', 'mp4'];
+$archivos = [];
+
+if (is_dir($carpeta)) {
+    foreach (glob($carpeta . '/*') as $ruta) {
+        if (!is_file($ruta)) {
+            continue;
+        }
+
+        $extension = strtolower(pathinfo($ruta, PATHINFO_EXTENSION));
+        if (!in_array($extension, $extensionesPermitidas, true)) {
+            continue;
+        }
+
+        $archivos[] = [
+            'nombre' => basename($ruta),
+            'ruta' => 'imagen.html/' . basename($ruta),
+            'esVideo' => $extension === 'mp4'
+        ];
+    }
+}
+
+usort($archivos, function ($a, $b) {
+    return strcmp($a['nombre'], $b['nombre']);
+});
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -7,7 +33,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ideas madera</title>
 
-    <!-- Bootstrap CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     <style>
@@ -22,86 +47,55 @@
 
     <div class="input-group mb-4">
         <input id="searchInput" type="text" class="form-control" placeholder="Escribe: closet, cocina, puertas, muebles para tv" />
-        <button class="btn btn-primary" onclick="buscar()"></button>
+        <button class="btn btn-primary" type="button" onclick="buscar()">Buscar</button>
     </div>
 
     <div id="resultados" class="row g-3">
-
-        <!-- CLOSET -->
-        <div class="col-md-4 item" data-category="closet">
-            <img src="imagen.html/Imagecloset.jpeg" />
-        </div>
-        <div class="col-md-4 item" data-category="closet">
-            <img src="imagen.html/Imagecloset2.jpeg"/>
-        </div>
-        <div class="col-md-4 item" data-category="closet">
-            <img src="imagen.html/Imagecloset3.jpeg" />
-        </div>
-        <div class="col-md-4 item" data-category="closet">
-            <video controls>
-                <source src="imagen.html/video-closet.mp4" type="video/mp4" />
-            </video>
-        </div>
-        <div class="col-md-4 item" data-category="closet">
-            <video controls>
-                <source src="imagen.html/Videocloset2.mp4" type="video/mp4" />
-            </video>
-        </div>
-
-        <!-- COCINA -->
-        <div class="col-md-4 item" data-category="cocina">
-            <img src="imagen.html/Imagecocina.jpeg" />
-        </div>
-        <div class="col-md-4 item" data-category="cocina">
-            <img src="imagen.html/Imagecocina2.jpeg" />
-        </div>
-        <div class="col-md-4 item" data-category="cocina">
-            <img src="imagen.html/Imagecocina3.jpeg" />
-        </div>
-        <div class="col-md-4 item" data-category="cocina">
-            <video controls>
-                <source src="imagen.html/Videococina.mp4" />
-            </video>
-        </div>
-
-        <!-- PUERTAS -->
-        <div class="col-md-4 item" data-category="puertas">
-            <img src="imagen.html/Imagepuertas.jpeg" />
-        </div>
-        <div class="col-md-4 item" data-category="puertas">
-            <img src="imagen.html/Imagepuertas2.jpeg" />
-        </div>
-        <div class="col-md-4 item" data-category="puertas">
-            <img src="imagen.html/Imagepurtas3.jpeg" />
-        </div>
-
-        <!-- MUEBLES PARA TV -->
-        <div class="col-md-4 item" data-category="muebles para tv">
-            <img src="imagen.html/Imagemueblestv.jpeg" />
-        </div>
-        <div class="col-md-4 item" data-category="muebles para tv">
-            <img src="imagen.html/Imagemueblestv2.jpeg" />
-        </div>
-        <div class="col-md-4 item" data-category="muebles para tv">
-            <img src="imagen.html/Imagemueblestv3.jpeg" />
-        </div>
-        <div class="col-md-4 item" data-category="muebles para tv">
-            <img src="imagen.html/Imagemueblestv4.jpeg" />
-        </div>
-
+        <?php foreach ($archivos as $archivo): ?>
+            <?php
+            $nombre = strtolower($archivo['nombre']);
+            $busquedaArchivo = preg_replace('/[^a-z0-9]+/', ' ', $nombre);
+            $busquedaArchivo = str_replace(['purtas'], ['puertas'], $busquedaArchivo);
+            ?>
+            <div class="col-md-4 item" data-category="<?= htmlspecialchars(str_replace(['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif', '.mp4'], '', strtolower($archivo['nombre']))) ?>" data-search="<?= htmlspecialchars($busquedaArchivo) ?>">
+                <?php if ($archivo['esVideo']): ?>
+                    <video controls>
+                        <source src="<?= htmlspecialchars($archivo['ruta']) ?>" type="video/mp4" />
+                    </video>
+                <?php else: ?>
+                    <img src="<?= htmlspecialchars($archivo['ruta']) ?>" alt="<?= htmlspecialchars($archivo['nombre']) ?>" />
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
     </div>
 </div>
 
 <script>
+function normalizar(texto) {
+    return (texto || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/purtas/g, 'puertas')
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim();
+}
+
 function buscar() {
-    const texto = document.getElementById("searchInput").value.trim().toLowerCase();
+    const texto = normalizar(document.getElementById('searchInput').value);
     const items = document.querySelectorAll('.item');
 
     items.forEach(item => {
-        const categoria = item.getAttribute('data-category').toLowerCase();
-        item.style.display = !texto || categoria.includes(texto) ? 'block' : 'none';
+        const categoria = normalizar(item.getAttribute('data-category'));
+        const busqueda = normalizar(item.getAttribute('data-search'));
+        const coincide = !texto || categoria.includes(texto) || busqueda.includes(texto);
+        item.style.display = coincide ? 'block' : 'none';
     });
 }
+
+window.addEventListener('DOMContentLoaded', function () {
+    buscar();
+});
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
