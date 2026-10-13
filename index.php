@@ -458,6 +458,11 @@ $busqueda = trim($_GET['buscar'] ?? '');
                 </article>
 
                 <article class="project-card is-hidden" style="display: none;" data-category="closet" data-search="closet closets">
+                    <img src="imagen.html/Imagencloset.jpeg" alt="Closet en madera">
+                    <h3>Closet</h3>
+                </article>
+
+                <article class="project-card is-hidden" style="display: none;" data-category="closet" data-search="closet closets">
                     <img src="imagen.html/Imagenx1.jpeg" alt="Interior de closet fabricado en madera">
                     <h3>Closet</h3>
                 </article>
